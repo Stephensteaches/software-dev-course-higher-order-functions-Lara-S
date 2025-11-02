@@ -16,13 +16,13 @@ They will:
 // 📦 Starting Dataset: Product List
 // ============================================
 
-const products = [
-  { name: "Laptop", price: 1000, inStock: true },
-  { name: "Phone", price: 500, inStock: false },
-  { name: "Tablet", price: 800, inStock: true },
-  { name: "Monitor", price: 300, inStock: true },
-  { name: "Keyboard", price: 100, inStock: false },
-];
+//const products = [
+  //{ name: "Laptop", price: 1000, inStock: true },
+  //{ name: "Phone", price: 500, inStock: false },
+  //{ name: "Tablet", price: 800, inStock: true },
+  //{ name: "Monitor", price: 300, inStock: true },
+  //{ name: "Keyboard", price: 100, inStock: false },
+//];
 
 // ============================================
 // 🔧 Tasks
@@ -92,3 +92,76 @@ Step-by-Step:
 // console.log("Uppercased names:", ...);
 // console.log("Discounted products:", ...);
 // console.log("Total value in stock:", ...);
+
+// ============================================
+
+const products = [
+  { name: "Laptop", price: 1000, inStock: true },
+  { name: "Phone", price: 500, inStock: false },
+  { name: "Tablet", price: 800, inStock: true },
+  { name: "Monitor", price: 300, inStock: true },
+  { name: "Keyboard", price: 100, inStock: false },
+];
+
+// Task 1: Filter Products by Availability
+
+function filterProducts(products, callback) { //filterProducts function is being defined were with two parameters,
+  //the first is an array of products, and the second is a callback function that will be used to filter the products
+  //by either aviailability or price threshold.
+  return products.filter(callback);
+}
+const availableProducts = filterProducts(products, product => product.inStock);
+//filters the products array using the filterProducts function and a callback that checks if the product is in stock
+const priceOfProducts = filterProducts(products, product => product.price > 500);
+//filters the products array using the filterProducts function and a callback that checks if the product price is greater than 500
+
+console.log("Filtered products (in stock):", availableProducts);
+//logs the filtered products that are in stock - should return Laptop, Tablet, Monitor
+console.log("Filtered products (price > 500):", priceOfProducts);
+//logs the filtered products that have a price greater than 500 - should return Laptop, Tablet
+
+// Task 2: Transform Product Names
+
+function productUpperCase(products) {
+  return products.map(product => product.name.toUpperCase());
+}
+const upperCaseNames = productUpperCase(products);
+console.log("Uppercased names:)", upperCaseNames);
+//logs the uppercased names of the products - should return ["LAPTOP", "PHONE", "TABLET", "MONITOR", "KEYBOARD"]
+
+// Task 3: Generate Discounted Prices
+
+function applyDiscount(discountPercent) {
+  return function(product) {
+    const discountAmount = (discountPercent / 100) * product.price;
+    return product.price - discountAmount;
+  }
+}
+
+const discount10Percent = applyDiscount(10);
+products.forEach(product => product.salePrice = discount10Percent(product));
+console.log("Discounted Products:", products);
+//logs the products array with a new salePrice that contains the price after the 10% discount
+
+// Task 4: Calculate Total Inventory Value
+const totalValue = products.reduce((accumulator, currentProduct) => {
+if(currentProduct.inStock) {
+  return accumulator + currentProduct.price;
+  
+}
+return accumulator;
+}, 0); //0 has to be the initial value to begin the accumulation from
+console.log("Initial Total Value in Stock:", totalValue);
+//logs the total value of products that are in stock - should return 2100 (1000 + 800 + 300)
+
+//logs total value of products with sale price considered
+const totalSaleValue = products.reduce((accumulator, currentProduct) => {
+  if(currentProduct.inStock) {
+    return accumulator + currentProduct.salePrice;
+  }
+  return accumulator;
+}, 0);
+console.log("Total Sale Value in Stock:", totalSaleValue);
+//logs the total sale value of products that are in stock - should return 1890 (900 + 720 + 270)
+
+
